@@ -1,8 +1,9 @@
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.Iterator;
 
-public class BinarySearchTree<E extends Comparable<E>> 
-	extends AbstractStructure<E> implements OrderedStructure<E> { 
+public class BinarySearchTree<E extends Comparable<E>>  implements OrderedStructure<E> { 
 	
 	public BinarySearchTree() // post: constructs an empty binary search tree
 
@@ -24,3 +25,33 @@ public class BinarySearchTree<E extends Comparable<E>>
 
 	public Iterator<E> iterator() // post: returns iterator to traverse BST
 }
+
+	@Override
+	public boolean contains(Object value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void add(Object value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object remove(Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Enumeration elements() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection values() {
+		// TODO Auto-generated method stub
+		return null;
+	}

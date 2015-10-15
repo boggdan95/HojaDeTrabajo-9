@@ -1,4 +1,6 @@
 
+import java.util.Hashtable;
+
 class WordSetFactory {
 	
 	// Metodo que genera un objeto que implementa WordSet
@@ -9,17 +11,26 @@ class WordSetFactory {
 	//                         5 = implementado con TreeMap (de Java Collection Framework)
 	
 	public static WordSet generateSet(int tipo)
-	{
-	    if (tipo == 1)
-		    return new SimpleSet();
-		else
-		    // aqui se regresara el set empleando sus implementaciones:
-			// if tipo == 2 cree una instancia para un Wordset implementao con Red Black Tree
-			// if tipo == 3 cree una instancia para un Wordset implementado con Splay Tree
-			// if tipo == 4 cree una instancia para un Wordset implementado con Hash table
-			// if tipo == 5 cree una instancia para un Wordset implementado con TreeMap
-			
-			return  null; // modificarlo para que regrese la implementacion seleccionada
+	{	// aqui se regresara el set empleando sus implementaciones:
+		// if tipo == 2 cree una instancia para un Wordset implementao con Red Black Tree
+		// if tipo == 3 cree una instancia para un Wordset implementado con Splay Tree
+		// if tipo == 4 cree una instancia para un Wordset implementado con Hash table
+		// if tipo == 5 cree una instancia para un Wordset implementado con TreeMap
+		switch(tipo){
+			case 1:
+				return new SimpleSet();
+			case 2:
+				return null;
+			case 3:
+				return null;
+			case 4:
+				return new HashtableSet();
+			case 5:
+				return null;
+			default:
+				System.out.println("Error en el tipo");
+			return null;
+		}
 	}
 	
 	

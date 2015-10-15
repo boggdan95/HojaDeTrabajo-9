@@ -1,5 +1,7 @@
+import java.util.Comparator;
+import java.util.Iterator;
 
-public class SplayTree<E extends Comparable<E>>
+public class  SplayTree <E extends Comparable<E>>
 	extends BinarySearchTree<E> implements OrderedStructure<E> { 
 	
 	public SplayTree() // post: construct a new splay tree
