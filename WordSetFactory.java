@@ -35,7 +35,7 @@ class WordSetFactory {
 			return null;
 		default:
 			System.out.println("Error en el tipo");
-			break;
+			return null;
 		}
 	}
 }
