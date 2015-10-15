@@ -1,0 +1,5 @@
+Comandos:
+Compilar:
+javac WordTypeCounter.java
+Correr: 
+java WordTypeCounter files/words.txt files/text.txt 1
