@@ -1,8 +1,8 @@
-import java.util.HashMap;
+import java.util.TreeMap;
 
-public class HashtableSet implements WordSet 
+public class TreeMapSet implements WordSet 
 {
-	private HashMap mapeo = new HashMap<String, Word>();
+	private TreeMap mapeo = new TreeMap<String, Word>();
 	public void add(Word wordObject)
 	{
 		mapeo.put(wordObject.getWord(), wordObject );
