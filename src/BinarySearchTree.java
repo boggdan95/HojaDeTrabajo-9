@@ -132,48 +132,40 @@ public class BinarySearchTree<E extends Comparable<E>>  implements OrderedStruct
 		predecessor.setRight(right);
 		return predecessor;
 		}
-	@Override
+
 	public int size() {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
-	@Override
+
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	@Override
+
 	public void clear() {
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public boolean contains(Object value) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public void add(Object value) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public Object remove(Object value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
+
+	
+
 	public Enumeration elements() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
+
 	public Iterator iterator() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
+
 	public Collection values() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Object remove(E value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -185,5 +177,3 @@ public class BinarySearchTree<E extends Comparable<E>>  implements OrderedStruct
 	return root.inorderIterator();
 	}*/
 }
-
-	
