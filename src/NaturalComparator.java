@@ -1,3 +1,11 @@
+/**
+ * Hoja de Trabajo 9
+ * 
+ * @Boggdan Barrientos 14484
+ * @Andre Rodas		   14395
+ * @Rudy Garrido	   14366
+ */
+
 import java.util.Comparator;
 public class NaturalComparator<E extends Comparable<E>>
 implements Comparator<E>

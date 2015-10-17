@@ -1,3 +1,11 @@
+/**
+ * Hoja de Trabajo 9
+ * 
+ * @Boggdan Barrientos 14484
+ * @Andre Rodas		   14395
+ * @Rudy Garrido	   14366
+ */
+
 // Abstract base class for portable iterator and enumeration implementation.
 // (c) 2001 duane a. bailey
 
