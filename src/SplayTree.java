@@ -1,264 +1,217 @@
 /**
- * Hoja de Trabajo 9
- * 
+ * Hoja de Trabajo 9 
  * @Boggdan Barrientos 14484
  * @Andre Rodas		   14395
  * @Rudy Garrido	   14366
  */
 
-// This is a implementation of splay trees, in Java.
-// (c) 1996, 1997, 1998, 2001 duane a. bailey
-// (c) 1998, 2001 duane a. bailey
-import java.util.Iterator;
-import java.util.Comparator;
 
 /**
- * An implementation of binary search trees, based on a splay operation
- * by Tarjan et al.  An extension of the binary search tree class that decreases
- * the likelyhood of a binary tree becomming degenerate.
- *
- * Example usage:
- * <P>
- * To create a  splay tree containing the months of the year
- * and to print out this tree as it grows we could use the following.
- * <P>
- * <pre>
- * public static void main(String[] argv){
- *     SplayTree test = new {@link  #SplayTree()};
- *       
- *     //declare an array of months
- *     String[] months = new String[]{"March", "May", "November", "August", 
- *                                    "April", "January", "December", "July",
- *                                    "February", "June", "October", "September"};
- *      
- *     //add the months to the tree and print out the tree as it grows
- *     for(int i=0; i < months.length; i++){
- *        test.{@link #add(Object) add(months[i])};
- *        System.out.println("Adding: " + months[i] + "\n" +test.{@link #treeString()});
- *      }
- *  }
- * </pre>
- *
- * @version $Id: SplayTree.java 35 2007-08-09 20:38:38Z bailey $
- * @author, 2001 duane a. bailey
+ * Implements a top-down splay tree.
+ * Available at http://www.link.cs.cmu.edu/splay/
+ * Author: Danny Sleator <sleator@cs.cmu.edu>
+ * This code is in the public domain.
  */
-public class SplayTree<E extends Comparable<E>>
-    extends BinarySearchTree<E> implements OrderedStructure<E>
+
+class BinaryNode
 {
-    /**
-     * Construct an empty search tree.
-     *
-     * @post construct a new splay tree
-     * 
-     */
-    public SplayTree()
-    {
-        this(new NaturalComparator<E>());
+    BinaryNode(Word theKey) {
+        key = theKey;
+        left = right = null;
     }
 
-    /**
-     * Construct an empty search tree.
-     *
-     * @post construct a new splay tree
-     * @param alternateOrder the ordering imposed on the values inserted
-     * 
-     */
-    public SplayTree(Comparator<E> alternateOrder)
-    {
-        super(alternateOrder);
-    }
-
-    /**
-     * Add a value to the splay tree.
-     *
-     * @post adds a value to the binary search tree
-     * 
-     * @param val The value to be xadded.
-     */
-    public void add(E val)
-    {
-        BinaryTree<E> newNode = new BinaryTree<E>(val,EMPTY,EMPTY);
-
-        // add value to binary search tree 
-        // if there's no root, create value at root.
-        if (root.isEmpty())
-        {
-            root = newNode;
-        }
-        else
-        {
-            BinaryTree<E> insertLocation = locate(root,val);
-            E nodeValue = insertLocation.value();
-
-            // The location returned is the successor or predecessor
-            // of the to-be-inserted value.
-
-            if (ordering.compare(nodeValue,val) < 0) {
-                insertLocation.setRight(newNode);
-            } else {
-                if (!insertLocation.left().isEmpty()) {
-                    // if value is in tree, we insert just before
-                    predecessor(insertLocation).setRight(newNode);
-                } else {
-                    insertLocation.setLeft(newNode);
-                }
-            }
-            splay(root = newNode);
-        }
-        count++;
-    }
-
-    /**
-     * Determine if a particular value is within the search tree.
-     *
-     * @post returns true iff val is a value found within the tree
-     * 
-     * @param val The comparable value to be found.
-     * @return True iff the comparable value is within the tree.
-     */
-    public boolean contains(E val)
-    {
-        if (root.isEmpty()) return false;
-
-        BinaryTree<E> possibleLocation = locate(root,val);
-        if (val.equals(possibleLocation.value())) {
-            splay(root = possibleLocation);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Fetch a reference to the comparable value in the tree.
-     * Resulting value may be inspected, but should not be modified in
-     * a way that might change its position within tree.
-     *
-     * @post returns object found in tree, or null
-     * 
-     * @param val The value to be sought in tree.
-     * @return A reference to the value within the tree.
-     */
-    public E get(E val)
-    {
-        if (root.isEmpty()) return null;
-
-        BinaryTree<E> possibleLocation = locate(root,val);
-        splay(root = possibleLocation);
-        if (val.equals(possibleLocation.value()))
-            return possibleLocation.value();
-        else
-            return null;
-    }
-
-    /**
-     * Remove a comparable value from the tree.
-     *
-     * @post removes one instance of val, if found
-     * 
-     * @param val The value to be removed.
-     * @return The actual value removed.
-     */
-    public E remove(E val) 
-    {
-        if (isEmpty()) return null;
-      
-        if (val.equals(root.value())) // delete root value
-        {
-            BinaryTree<E> newroot = removeTop(root);
-            count--;
-            E result = root.value();
-            root = newroot;
-            return result;
-        }
-        else
-        {
-            BinaryTree<E> location = locate(root,val);
-
-            if (val.equals(location.value())) {
-                count--;
-                BinaryTree<E> parent = location.parent();
-                if (parent.right() == location) {
-                    parent.setRight(removeTop(location));
-                } else {
-                    parent.setLeft(removeTop(location));
-                }
-                splay(root = parent);
-                return location.value();
-            }
-        }
-        return null;
-    }
-
-    protected void splay(BinaryTree<E> splayedNode)
-    {
-        BinaryTree<E> parent,grandParent;
-
-        while ((parent = splayedNode.parent()) != null)
-        {
-            if ((grandParent = parent.parent()) == null)
-            {
-                if (splayedNode.isLeftChild()) parent.rotateRight();
-                else parent.rotateLeft();
-            }
-            else
-            {
-                if (parent.isLeftChild())
-                {
-                    if (splayedNode.isLeftChild())
-                    {
-                        // notice the order of this rotation.
-                        // not doing this in order works, but not
-                        // efficiently.
-                        grandParent.rotateRight();
-                        parent.rotateRight();
-                    }
-                    else
-                    {
-                        parent.rotateLeft();
-                        grandParent.rotateRight();
-                    }
-                }
-                else
-                {
-                    if (splayedNode.isRightChild()) {
-                        grandParent.rotateLeft();
-                        parent.rotateLeft();
-                    }
-                    else
-                    {
-                        parent.rotateRight();
-                        grandParent.rotateLeft();
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Construct an inorder traversal of the elements in the splay tree.
-     *
-     * @post returns iterator that traverses tree nodes in order
-     * 
-     * @return An iterator to traverse the tree.
-     */
-    public Iterator<E> iterator()
-    {
-        return new SplayTreeIterator<E>(root,EMPTY);
-    }
-
-    /**
-     * Construct a string that represents the splay tree.
-     *
-     * @post returns string representation
-     * 
-     * @return A string representing the tree.
-     */
-    public String toString()
-    {
-        StringBuffer s = new StringBuffer();
-        s.append("<SplayTree: size="+count+" root="+root+">");
-        return s.toString();
-    }
+    Word key;          // The data in the node
+    BinaryNode left;         // Left child
+    BinaryNode right;        // Right child
 }
 
+public class SplayTree{
+	
+    private BinaryNode root;
+
+    public SplayTree() {
+        root = null;
+    }
+    
+    /**
+     * Insert into the tree.
+     * @param x the item to insert.
+     * @throws DuplicateItemException if x is already present.
+     */
+    public void insert(Word key) {
+	BinaryNode n;
+	int c;
+	if (root == null) {
+	    root = new BinaryNode(key);
+	    return;
+	}
+	splay(key);
+	if ((c = key.compareTo(root.key)) == 0) {
+	    //	    throw new DuplicateItemException(x.toString());	    
+	    return;
+	}
+	n = new BinaryNode(key);
+	if (c < 0) {
+	    n.left = root.left;
+	    n.right = root;
+	    root.left = null;
+	} else {
+	    n.right = root.right;
+	    n.left = root;
+	    root.right = null;
+	}
+	root = n;
+    }
+
+    /**
+     * Remove from the tree.
+     * @param x the item to remove.
+     * @throws ItemNotFoundException if x is not found.
+     */
+    public void remove(Word key) {
+	BinaryNode x;
+	splay(key);
+	if (key.compareTo(root.key) != 0) {
+	    //            throw new ItemNotFoundException(x.toString());
+	    return;
+	}
+	// Now delete the root
+	if (root.left == null) {
+	    root = root.right;
+	} else {
+	    x = root.right;
+	    root = root.left;
+	    splay(key);
+	    root.right = x;
+	}
+    }
+
+    /**
+     * Find the smallest item in the tree.
+     */
+    public Word findMin() {
+        BinaryNode x = root;
+        if(root == null) return null;
+        while(x.left != null) x = x.left;
+        splay(x.key);
+        return x.key;
+    }
+
+    /**
+     * Find the largest item in the tree.
+     */
+    public Word findMax() {
+        BinaryNode x = root;
+        if(root == null) return null;
+        while(x.right != null) x = x.right;
+        splay(x.key);
+        return x.key;
+    }
+
+    /**
+     * Find an item in the tree.
+     */
+    public Word find(Word key) {
+	if (root == null) return null;
+	splay(key);
+        if(root.key.compareTo(key) != 0) return null;
+        else return root.key;
+    }
+
+    /**
+     * Test if the tree is logically empty.
+     * @return true if empty, false otherwise.
+     */
+    public boolean isEmpty() {
+        return root == null;
+    }
+
+    /** this method just illustrates the top-down method of
+     * implementing the move-to-root operation 
+     */
+    private void moveToRoot(Word key) {
+	BinaryNode l, r, t, y;
+	l = r = header;
+	t = root;
+	header.left = header.right = null;
+	for (;;) {
+	    if (key.compareTo(t.key) < 0) {
+		if (t.left == null) break;
+		r.left = t;                                 /* link right */
+		r = t;
+		t = t.left;
+	    } else if (key.compareTo(t.key) > 0) {
+		if (t.right == null) break;
+		l.right = t;                                /* link left */
+		l = t;
+		t = t.right;
+	    } else {
+		break;
+	    }
+	}
+	l.right = t.left;                                   /* assemble */
+	r.left = t.right;
+	t.left = header.right;
+	t.right = header.left;
+	root = t;
+    }
+
+    private static BinaryNode header = new BinaryNode(null); // For splay
+    
+    /**
+     * Internal method to perform a top-down splay.
+     * 
+     *   splay(key) does the splay operation on the given key.
+     *   If key is in the tree, then the BinaryNode containing
+     *   that key becomes the root.  If key is not in the tree,
+     *   then after the splay, key.root is either the greatest key
+     *   < key in the tree, or the lest key > key in the tree.
+     *
+     *   This means, among other things, that if you splay with
+     *   a key that's larger than any in the tree, the rightmost
+     *   node of the tree becomes the root.  This property is used
+     *   in the delete() method.
+     */
+
+    private void splay(Word key) {
+	BinaryNode l, r, t, y;
+	l = r = header;
+	t = root;
+	header.left = header.right = null;
+	for (;;) {
+	    if (key.compareTo(t.key) < 0) {
+		if (t.left == null) break;
+		if (key.compareTo(t.left.key) < 0) {
+		    y = t.left;                            /* rotate right */
+		    t.left = y.right;
+		    y.right = t;
+		    t = y;
+		    if (t.left == null) break;
+		}
+		r.left = t;                                 /* link right */
+		r = t;
+		t = t.left;
+	    } else if (key.compareTo(t.key) > 0) {
+		if (t.right == null) break;
+		if (key.compareTo(t.right.key) > 0) {
+		    y = t.right;                            /* rotate left */
+		    t.right = y.left;
+		    y.left = t;
+		    t = y;
+		    if (t.right == null) break;
+		}
+		l.right = t;                                /* link left */
+		l = t;
+		t = t.right;
+	    } else {
+		break;
+	    }
+	}
+	l.right = t.left;                                   /* assemble */
+	r.left = t.right;
+	t.left = header.right;
+	t.right = header.left;
+	root = t;
+    }
+
+}
