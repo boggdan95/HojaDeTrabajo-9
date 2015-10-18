@@ -6,8 +6,6 @@
  * @Rudy Garrido	   14366
  */
 
-import java.util.Hashtable;
-
 class WordSetFactory {
 	
 	// Metodo que genera un objeto que implementa WordSet
@@ -27,13 +25,13 @@ class WordSetFactory {
 			case 1:
 				return new SimpleSet();
 			case 2:
-				return null;
+				return new RedBlackTreeSet();
 			case 3:
-				return null;
+				return new SplayTreeSet();
 			case 4:
 				return new HashtableSet();
 			case 5:
-				return null;
+				return new TreeMapSet();
 			default:
 				System.out.println("Error en el tipo");
 			return null;

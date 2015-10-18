@@ -1,3 +1,11 @@
+/**
+ * Hoja de Trabajo 9
+ * 
+ * @Boggdan Barrientos 14484
+ * @Andre Rodas		   14395
+ * @Rudy Garrido	   14366
+ */
+
 // A private iterator for circular lists.
 // (c) 1998, 2001 duane a. bailey
 

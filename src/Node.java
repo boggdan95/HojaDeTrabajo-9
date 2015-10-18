@@ -1,3 +1,11 @@
+/**
+ * Hoja de Trabajo 9
+ * 
+ * @Boggdan Barrientos 14484
+ * @Andre Rodas		   14395
+ * @Rudy Garrido	   14366
+ */
+
 // Implementation of a node of a singly linked list.
 // (c) 1998, 2001 duane a. bailey
 

@@ -1,3 +1,11 @@
+/**
+ * Hoja de Trabajo 9
+ * 
+ * @Boggdan Barrientos 14484
+ * @Andre Rodas		   14395
+ * @Rudy Garrido	   14366
+ */
+
 // An implementation of red-black trees.
 // (c) 2000, 2001 duane a. bailey
 import java.util.Iterator;
